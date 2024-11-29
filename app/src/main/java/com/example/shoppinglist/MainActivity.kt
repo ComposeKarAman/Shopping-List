@@ -24,21 +24,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-
-class x
-{
-    fun s() {
-
-        val name: String? = "strip"
-        println(name?.let { it.uppercase() })
-        println(name)
-    }
-
-    fun main(){
-        val obj = x()
-    }
-}
-
-

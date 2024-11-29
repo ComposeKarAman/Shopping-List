@@ -4,10 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,8 +32,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Ui(modifier: Modifier) {
 
-//variables declaration
-
 //enable variables
     var qtyEnabled by remember { mutableStateOf(false) }
     var unitEnable by remember { mutableStateOf(false) }
@@ -43,7 +39,6 @@ fun Ui(modifier: Modifier) {
     var alertEnable by remember { mutableStateOf(false) }
 //lazyColumn variables
     var sItems by remember{ mutableStateOf(listOf<ItemData>())}
-//AlertDialog Variables
 //  outlinedTextField Variables
     var itemName by remember { mutableStateOf("") }
     var ipQuantity by remember { mutableStateOf("") }
@@ -53,8 +48,16 @@ fun Ui(modifier: Modifier) {
     var dropdownUnit by remember { mutableStateOf("Qty") }
 
 //UI starts here
-    Column(modifier.fillMaxSize(), Arrangement.Center) {
-        Button({ alertEnable = true }, modifier.align(Alignment.CenterHorizontally)) {
+    Column(modifier.fillMaxSize()) {
+        Button({
+            alertEnable = true
+            itemName = ""
+            ipQuantity = ""
+            dropDisplayBtn = "1"
+            dropdownUnit = "Qty"
+            enableQuantity = false
+        },
+            modifier.align(Alignment.CenterHorizontally)) {
             Text("Add Item")
         }
 
@@ -68,17 +71,30 @@ fun Ui(modifier: Modifier) {
             /*items(listOfItems) tells the LazyColumn what data to display*/
             items(sItems) {
                 /*(variable name) x -> /*code*/ is where you define how each item in the list should look and behave*/
-                x ->
-                if (x.isEditing){
-                    EditFunction(x,{
-                        editedName, editedQuantity, editUnit ->
-                    })
+                itemVar ->
+                if (itemVar.isEditing){
+                    EditFunction(itemVar
+                    ) { editedName, editedQuantity, editUnit ->
+                        sItems = sItems.map { it.copy(isEditing = false) }
+                        val editedItem = sItems.find { it.id == itemVar.id }
+                        editedItem?.let {
+                            it.name = editedName
+                            it.quantity = editedQuantity
+                            it.unit = editUnit
+                        }
+                    }
                 }else{
-
+                    NewShoppingItem(itemVar, {
+                        sItems = sItems.map { it.copy(isEditing = (it.id == itemVar.id)) }
+                    }, {
+                        sItems = sItems - itemVar
+                    })
                 }
             }
         }
         }
+
+
         if (alertEnable) {
             AlertDialog(
                 {alertEnable = false},
@@ -120,9 +136,8 @@ fun Ui(modifier: Modifier) {
                             itemName,
                             { itemName = it },
                             label = { Text("add your item here") },
+                            modifier = Modifier.padding(4.dp)
                         )
-
-                        Spacer(modifier.height(4.dp))
 
                         Text("Select Quantity")
                         Row(
@@ -149,6 +164,7 @@ fun Ui(modifier: Modifier) {
                                     DropdownMenuItem(
                                         { Text("1") },
                                         {
+                                            ipQuantity = ""
                                             dropdownQty = 1
                                             dropDisplayBtn = "1"
                                             qtyEnabled = false
@@ -157,6 +173,7 @@ fun Ui(modifier: Modifier) {
                                     DropdownMenuItem(
                                         { Text("2") },
                                         {
+                                            ipQuantity = ""
                                             dropdownQty = 2
                                             dropDisplayBtn = "2"
                                             qtyEnabled = false
@@ -165,11 +182,13 @@ fun Ui(modifier: Modifier) {
                                     DropdownMenuItem(
                                         { Text("3") },
                                         {
+                                            ipQuantity = ""
                                             dropdownQty = 3
                                             dropDisplayBtn = "3"
                                             qtyEnabled = false
                                             enableQuantity = false
-                                        })
+                                        }
+                                    )
                                 }
                             }
 
@@ -185,8 +204,10 @@ fun Ui(modifier: Modifier) {
                                     DropdownMenuItem(
                                         { Text("Qty") },
                                         {
+                                            dropdownUnit = "Qty"
                                             unitEnable = false
-                                        })
+                                        }
+                                    )
                                     DropdownMenuItem(
                                         { Text("Kg") },
                                         {
@@ -199,7 +220,8 @@ fun Ui(modifier: Modifier) {
                                         {
                                             dropdownUnit = "Grm"
                                             unitEnable = false
-                                        })
+                                        }
+                                    )
                                     DropdownMenuItem(
                                         { Text("Ltr") },
                                         {
@@ -212,20 +234,23 @@ fun Ui(modifier: Modifier) {
                                         {
                                             dropdownUnit = "Ml"
                                             unitEnable = false
-                                        })
+                                        }
+                                    )
                                 }
                             }
                         }
-                        OutlinedTextField(
-                            ipQuantity,
-                            {
-                                ipQuantity = it
-                                dropdownQty = ipQuantity.toInt()
-                                dropDisplayBtn = ipQuantity
-                            },
-                            enabled = enableQuantity,
-                            label = { Text("enter custom quantity") }
-                        )
+
+                        if (enableQuantity) {
+                            OutlinedTextField(
+                                ipQuantity,
+                                {
+                                    ipQuantity = it
+                                    dropdownQty = ipQuantity.toIntOrNull() ?: 1
+                                    dropDisplayBtn = ipQuantity
+                                },
+                                label = { Text("enter custom quantity") }
+                            )
+                        }
                     }
                 }
             )

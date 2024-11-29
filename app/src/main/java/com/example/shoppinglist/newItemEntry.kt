@@ -33,7 +33,7 @@ fun NewShoppingItem(
                 BorderStroke(2.dp, Color(0xFF7430A9)),
                 RoundedCornerShape(30)
             ),
-        Arrangement.SpaceEvenly
+        Arrangement.SpaceBetween
     ){
         Text(item.name, Modifier.padding(4.dp))
         Text("${item.quantity} ${item.unit}", Modifier.padding(4.dp))
@@ -44,6 +44,4 @@ fun NewShoppingItem(
             Icon(Icons.Default.Delete, null)
         }
     }
-
-
 }

@@ -10,10 +10,10 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -24,7 +24,6 @@ fun EditFunction(item: ItemData, onEditDone: (String, Int, String) -> Unit) {
     var changeName by remember{ mutableStateOf(item.name)}
     var changeQuantity by remember{ mutableStateOf(item.quantity.toString())}
     var changeUnit by remember{ mutableStateOf(item.unit)}
-    var isEditing by remember{ mutableStateOf(item.isEditing)}
 
     Row(
         Modifier
@@ -39,7 +38,7 @@ fun EditFunction(item: ItemData, onEditDone: (String, Int, String) -> Unit) {
                 singleLine = true,
                 modifier = Modifier
                     .wrapContentSize()
-                    .padding()
+                    .padding(2.dp)
             )
             Row(Modifier.padding(4.dp)) {
                 BasicTextField(
@@ -61,10 +60,9 @@ fun EditFunction(item: ItemData, onEditDone: (String, Int, String) -> Unit) {
                 )
             }
 
-            Button({
-                onEditDone(changeName, changeQuantity.toIntOrNull() ?: 1, changeUnit)
-            }) { Text("Save") }
         }
-
+        Button({
+            onEditDone(changeName, changeQuantity.toIntOrNull() ?: 1, changeUnit)
+        }) { Text("Save") }
     }
 }
