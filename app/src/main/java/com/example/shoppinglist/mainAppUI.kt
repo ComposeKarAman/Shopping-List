@@ -53,11 +53,12 @@ fun Ui(modifier: Modifier) {
             alertEnable = true
             itemName = ""
             ipQuantity = ""
+            dropdownQty = 1
             dropDisplayBtn = "1"
             dropdownUnit = "Qty"
             enableQuantity = false
         },
-            modifier.align(Alignment.CenterHorizontally)) {
+            Modifier.align(Alignment.CenterHorizontally)) {
             Text("Add Item")
         }
 
@@ -73,8 +74,9 @@ fun Ui(modifier: Modifier) {
                 /*(variable name) x -> /*code*/ is where you define how each item in the list should look and behave*/
                 itemVar ->
                 if (itemVar.isEditing){
-                    EditFunction(itemVar
-                    ) { editedName, editedQuantity, editUnit ->
+                    EditFunction(
+                        item = itemVar,
+                        onEditDone = { editedName, editedQuantity, editUnit ->
                         sItems = sItems.map { it.copy(isEditing = false) }
                         val editedItem = sItems.find { it.id == itemVar.id }
                         editedItem?.let {
@@ -82,11 +84,11 @@ fun Ui(modifier: Modifier) {
                             it.quantity = editedQuantity
                             it.unit = editUnit
                         }
-                    }
+                    })
                 }else{
-                    NewShoppingItem(itemVar, {
-                        sItems = sItems.map { it.copy(isEditing = (it.id == itemVar.id)) }
-                    }, {
+                    NewShoppingItem(itemVar, onEdit = {
+                        sItems = sItems.map { it.copy(isEditing = it.id == itemVar.id) }
+                    }, onDelete = {
                         sItems = sItems - itemVar
                     })
                 }
@@ -112,7 +114,8 @@ fun Ui(modifier: Modifier) {
                                 id = sItems.size + 1,
                                 name = itemName,
                                 quantity = dropdownQty,
-                                unit = dropdownUnit
+                                unit = dropdownUnit,
+
                             )
                             sItems = sItems + newEntry
                         }

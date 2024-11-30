@@ -32,15 +32,15 @@ fun NewShoppingItem(
             .border(
                 BorderStroke(2.dp, Color(0xFF7430A9)),
                 RoundedCornerShape(30)
-            ),
+            ).padding(8.dp),
         Arrangement.SpaceBetween
     ){
         Text(item.name, Modifier.padding(4.dp))
         Text("${item.quantity} ${item.unit}", Modifier.padding(4.dp))
-        IconButton({onEdit}) {
+        IconButton(onEdit) {
             Icon(Icons.Default.Edit, null)
         }
-        IconButton({onDelete}) {
+        IconButton(onDelete) {
             Icon(Icons.Default.Delete, null)
         }
     }
