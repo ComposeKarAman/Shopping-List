@@ -86,9 +86,11 @@ fun Ui(modifier: Modifier) {
                         }
                     })
                 }else{
-                    NewShoppingItem(itemVar, onEdit = {
+                    NewShoppingItem(itemVar,
+                        onEdit = {
                         sItems = sItems.map { it.copy(isEditing = it.id == itemVar.id) }
-                    }, onDelete = {
+                    },
+                        onDelete = {
                         sItems = sItems - itemVar
                     })
                 }
@@ -99,7 +101,7 @@ fun Ui(modifier: Modifier) {
 
         if (alertEnable) {
             AlertDialog(
-                {alertEnable = false},
+                {alertEnable = false },
 
                 { Row(
                     modifier.fillMaxWidth(),
@@ -129,11 +131,12 @@ fun Ui(modifier: Modifier) {
                 },
 
                 title = {Text("Add Items")},
+
                 text = {
                     Column {
                     //how lambda functions works
-                    //      var lam: (Int) -> (Int) = {it * 5}
-                    //      Text(lam(5).toString())
+//                          var m: (Int) -> (Int) = {it * 5}
+//                          Text(m(5).toString())
 
                         OutlinedTextField(
                             itemName,

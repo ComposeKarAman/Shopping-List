@@ -38,13 +38,13 @@ fun EditFunction(item: ItemData, onEditDone: (String, Int, String) -> Unit) {
             BasicTextField(
                 changeName,
                 { changeName = it },
-                singleLine = true,
-                modifier = Modifier
+                Modifier
                     .wrapContentSize()
                     .padding(6.dp)
                     .border(
                         BorderStroke(1.dp, Color(0xFF7430A9))
-                    ).padding(4.dp)
+                    ).padding(4.dp),
+                singleLine = true
             )
             Row(Modifier.padding(4.dp)) {
                 BasicTextField(
