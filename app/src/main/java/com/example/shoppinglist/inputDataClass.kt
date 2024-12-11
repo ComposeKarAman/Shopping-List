@@ -5,5 +5,5 @@ data class ItemData(
     var name: String,
     var quantity: Int,
     var unit: String,
-    var isEditing: Boolean = true
+    var isEditing: Boolean = false
 )
