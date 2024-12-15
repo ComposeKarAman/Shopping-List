@@ -53,7 +53,7 @@ The **Shopping List App** is a feature-rich and user-friendly application design
 ## 🛠️ Technologies Used  
 
 - **Frontend**: Jetpack Compose (Kotlin)  
-- **Storage**: Local storage/state management (no backend required)  
+- **Storage**: State management used. (no backend required)
 - **Platform**: Android  
 
 ---
